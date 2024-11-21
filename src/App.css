@@ -89,6 +89,12 @@
     margin-left: 1.5em;
   }
 
+  hr {
+    width: 100%;
+    border: none;
+    border-top: 2px solid #E0E0E0;
+  }
+
   pre {
     background-color: #f1f3f4;
     padding: 1em;
