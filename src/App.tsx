@@ -1,7 +1,8 @@
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react'
+import {useCallback, useEffect, useMemo, useRef, useState} from 'react'
 import './App.css'
 import {marked, Renderer} from "marked";
 import DOMPurify from "dompurify";
+import {EditorArea} from "./components/EditorArea.tsx";
 
 function App() {
   const [text, setText] = useState<string>(localStorage.getItem("text") || "");
@@ -10,6 +11,11 @@ function App() {
   const [isBold, setIsBold] = useState<boolean>(true);
   const outputRef = useRef<HTMLElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  marked.use({
+    breaks: true,
+    gfm: true
+  });
 
   const renderer = useMemo<Renderer>(() => {
     const r = new marked.Renderer();
@@ -21,11 +27,9 @@ function App() {
   }, [isBold]);
 
 
-  const onInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    if (e.target instanceof HTMLTextAreaElement) {
-      setText(e.target.value);
-      localStorage.setItem("text", e.target.value);
-    }
+  const onInput = (value: string) => {
+    setText(value);
+    localStorage.setItem("text", value);
   }
 
   useEffect(() => {
@@ -34,7 +38,7 @@ function App() {
 
   useEffect(() => {
     (async () => {
-      const markedText = await marked(text, {renderer, breaks: true});
+      const markedText = await marked(text, {renderer});
       setHtml(DOMPurify.sanitize(markedText));
     })();
   }, [text, isBold, renderer]);
@@ -68,9 +72,9 @@ function App() {
         <section className="editor-group">
           <section className="markdown pane">
             <h2 className="rubik-bold text-xl p-2 bg-gray-100 mb-4">✹ Markdown</h2>
-            <textarea ref={inputRef} placeholder="Markdownのでキストを入力" className="input w-full grow block"
-                      onInput={onInput} value={text}>
-            </textarea>
+            <EditorArea ref={inputRef} placeholder="Markdownのでキストを入力" className="input w-full grow block"
+                        onInput={onInput} value={text}>
+            </EditorArea>
           </section>
           <section className="output-group pane">
             <h2 className="rubik-bold text-xl p-2 bg-gray-100 mb-4">HTML</h2>
