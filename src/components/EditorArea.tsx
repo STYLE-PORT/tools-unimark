@@ -46,17 +46,17 @@ export const EditorArea = forwardRef<HTMLTextAreaElement, Props>(({
       if (indent > 0) {
         let count = 0;
         for (let i = startLineIndex; i <= endLineIndex; i++) {
-          lines[i] = "  " + lines[i];
-          count += 2;
+          lines[i] = "    " + lines[i];
+          count += 4;
         }
 
-        startAdjustmentCount = 2;
+        startAdjustmentCount = 4;
         endAdjustmentCount = count;
       } else {
         let firstLineCount = 0;
         let totalCount = 0;
         for (let i = startLineIndex; i <= endLineIndex; i++) {
-          const count = Math.min(2, lines[i].match(/^ {1,2}/)?.[0].length || 0);
+          const count = Math.min(4, lines[i].match(/^ {1,4}/)?.[0].length || 0);
           lines[i] = lines[i].substring(count);
           totalCount += count;
           if (i === startLineIndex) {
