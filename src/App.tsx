@@ -22,7 +22,6 @@ function App() {
     r.heading = ({text, depth}) => {
       return isBold ? `<h${depth}><strong>${text}</strong></h${depth}>` : `<h${depth}>${text}</h${depth}>`;
     };
-
     return r;
   }, [isBold]);
 
