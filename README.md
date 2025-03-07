@@ -8,10 +8,10 @@ universal-markdown から unimark と命名したら、ウニという文字が�
 ## 特徴
 
 - マークダウンを HTML に変換（[marked.js](https://marked.js.org/)を使用）
-- XSS 対策済み（[DOMPurify](https://github.com/cure53/DOMPurify)を使用）
 - 統一したスタイリングでコピペ可能
 - タブインデント機能付きエディタ
-- モバイルフレンドリーなレスポンシブデザイン
+- `?markdown=` で、URL として Markdown を共有可能
+- localStorage による一時保存
 
 ## 使い方
 
@@ -21,23 +21,9 @@ universal-markdown から unimark と命名したら、ウニという文字が�
 
 ### エディタの機能
 
-- **タブインデント**: Tab キーで 4 スペースのインデントを挿入
+- **タブインデント**: Tab キーで 2 スペースのインデントを挿入
 - **複数行インデント**: 複数行を選択して Tab キーを押すと、選択した全ての行にインデントを適用
-- **インデント解除**: Shift+Tab で 4 スペース分のインデントを解除
-
-## 技術スタック
-
-- **フロントエンド**
-  - React 18
-  - TypeScript
-  - Vite
-  - TailwindCSS
-- **マークダウン変換**
-  - marked.js
-  - DOMPurify（セキュリティ対策）
-- **開発ツール**
-  - ESLint
-  - SWC（高速ビルド）
+- **インデント解除**: Shift+Tab で 2 スペース分のインデントを解除
 
 ## 開発
 
@@ -50,11 +36,11 @@ universal-markdown から unimark と命名したら、ウニという文字が�
 
 ```bash
 # リポジトリのクローン
-git clone https://github.com/yourusername/unimark.git
-cd unimark
+git clone https://github.com/STYLE-PORT/tools-unimark
+cd tools-unimark
 
 # 依存パッケージのインストール
-npm install
+npm i
 ```
 
 ### 開発サーバーの起動
@@ -89,11 +75,3 @@ GitHub Pages でホストしています。
 ## ライセンス
 
 このプロジェクトは MIT ライセンスの下で公開されています。
-
-## 謝辞
-
-- [marked.js](https://marked.js.org/) - マークダウンパーサー
-- [DOMPurify](https://github.com/cure53/DOMPurify) - XSS 対策
-- [React](https://reactjs.org/) - UI ライブラリ
-- [Vite](https://vitejs.dev/) - ビルドツール
-- [TailwindCSS](https://tailwindcss.com/) - CSS フレームワーク
