@@ -72,29 +72,14 @@ export const useAppState = () => {
     window.history.replaceState({}, document.title, newUrl);
   }, []); // 空の依存配列で、マウント時に一度だけ実行
 
-  // リロード時に未保存の変更があれば確認
-  useEffect(() => {
-    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-      const storedText = localStorage.getItem("text") || "";
-      if (text !== storedText && isEdited) {
-        const message = "書きかけのテキストがあります。クリアしますか？";
-        e.returnValue = message;
-        return message;
-      }
-    };
-
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, [text, isEdited]);
-
+  // テキストを更新
   const updateText = useCallback((value: string) => {
     setText(value);
     localStorage.setItem("text", value);
     setIsEdited(true);
   }, []);
 
+  // Tickerを表示
   const showCopyStatusWithTimeout = useCallback(() => {
     setShowCopyStatus(true);
     setTimeout(() => {
@@ -102,6 +87,7 @@ export const useAppState = () => {
     }, 2000);
   }, []);
 
+  // 見出しを太字でレンダリングするオプション（for Slack）
   const toggleBold = useCallback(() => {
     setIsBold((prev) => !prev);
   }, []);
