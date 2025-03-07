@@ -5,7 +5,7 @@
 UNIMARK は、マークダウンをプレーンな HTML に出力して、コピペをするツールです。
 これによって、マークダウンで書かれたテキストを、Confluence や Slack、Notion などのリッチテキストエディタに統一したスタイリングでコピペできます。
 
-universal-markdown から unimark と命名したら、ウニという文字が浮かんだので ✹ UNIMARK ✹ となりました
+uni(唯一の)markdown から unimark としたのですが、ウニという文字が浮かんだので ✹ UNIMARK ✹ となりました
 
 ![Screenshot](docs/screenshot.jpg)
 
