@@ -16,6 +16,7 @@ function App() {
     setHtml,
     showCopyStatusWithTimeout,
     toggleBold,
+    copyAsUrl,
   } = useAppState();
 
   const outputRef = useRef<HTMLElement>(null);
@@ -68,13 +69,22 @@ function App() {
               />
               見出しを太字としてレンダリング
             </label>
-            <button
-              type="button"
-              className={styles.button}
-              onClick={handleCopy}
-            >
-              Copy
-            </button>
+            <div className={styles.buttonGroup}>
+              <button
+                type="button"
+                className={`${styles.button} ${styles.isPrimary}`}
+                onClick={handleCopy}
+              >
+                Copy
+              </button>
+              <button
+                type="button"
+                className={`${styles.button} ${styles.isSecondary}`}
+                onClick={copyAsUrl}
+              >
+                Copy as URL
+              </button>
+            </div>
           </div>
         </section>
       </div>

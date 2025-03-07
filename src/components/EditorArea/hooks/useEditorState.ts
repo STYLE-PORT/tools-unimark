@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import type { ChangeEvent, FormEvent, KeyboardEvent } from "react";
 import { useIndentation } from "./useIndentation";
 
@@ -13,6 +13,13 @@ export const useEditorState = (
 ) => {
   const [value, setValue] = useState(initialValue);
   const { handleIndentation } = useIndentation();
+
+  // initialValueが変更されたときにvalueを更新
+  useEffect(() => {
+    if (initialValue !== undefined) {
+      setValue(initialValue);
+    }
+  }, [initialValue]);
 
   const onChange = useCallback(
     (e: ChangeEvent<HTMLTextAreaElement>) => {

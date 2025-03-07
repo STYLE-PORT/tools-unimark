@@ -11,7 +11,7 @@ export const useIndentation = () => {
     selectionEnd: number,
     isIndent: boolean
   ): IndentationResult => {
-    const indentString = " ".repeat(4);
+    const indentString = " ".repeat(2);
     const lines = value.split("\n");
     let startAdjustmentCount = 0;
     let endAdjustmentCount = 0;
@@ -32,10 +32,12 @@ export const useIndentation = () => {
       let firstLineCount = 0;
       let totalCount = 0;
       for (let i = startLineIndex; i <= endLineIndex; i++) {
-        const count = Math.min(
-          indentString.length,
-          lines[i].match(new RegExp(`^ {1,${indentString.length}`))?.[0]?.length || 0
-        );
+        // 行の先頭にあるすべてのスペースを検出
+        const leadingSpaces = lines[i].match(/^[ ]+/)?.[0] || "";
+        
+        // 削除するスペースの数（最大でindentString.lengthまで）
+        const count = Math.min(indentString.length, leadingSpaces.length);
+        
         lines[i] = lines[i].substring(count);
         totalCount += count;
         if (i === startLineIndex) {

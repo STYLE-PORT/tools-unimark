@@ -13,7 +13,8 @@
 }
 
 .pane {
-    flex: 1;
+    flex-basis: 50%;
+    flex-shrink: 0;
     display: flex;
     flex-direction: column;
     min-height: 0;
@@ -23,14 +24,15 @@
     height: 100%;
 }
 
-.editorGroup {
+.editor-group {
     display: flex;
     gap: 1rem;
     flex: 1;
     min-height: 0;
+    width: calc(100% - 1rem);
 }
 
-.outputGroup {
+.output-group {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
@@ -48,22 +50,44 @@
 }
 
 .button {
-    background-color: #007bff;
-    color: white;
-    border: none;
     padding: 0.5em 1em;
     cursor: pointer;
     border-radius: var(--s-4);
     width: fit-content;
     position: relative;
     font-weight: 500;
+    border: 1px solid transparent;
+}
+
+.is-primary {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
 
     &:hover {
         background-color: #0056b3;
+        border-color: #0056b3;
     }
 
     &:active {
         background-color: #004286;
+        border-color: #004286;
+    }
+}
+
+.is-secondary {
+    background-color: white;
+    color: #333;
+    border-color: #ccc;
+
+    &:hover {
+        background-color: #f8f9fa;
+        border-color: #999;
+    }
+
+    &:active {
+        background-color: #e9ecef;
+        border-color: #777;
     }
 }
 
@@ -74,77 +98,157 @@
     border-radius: 4px;
     padding: 1rem;
     min-height: 0;
+    line-height: 1.4;
+    font-size: 16px;
+    color: #333;
+
+    & h1, & h2, & h3, & h4, & h5, & h6 {
+        margin-top: 1em;
+        margin-bottom: 0.5em;
+        line-height: 1.2;
+    }
 
     & h1 {
-        font-size: var(--s3);
-        font-weight: var(--font-weight-bold);
-        margin-bottom: 0.5em;
+        font-size: 1.8rem;
+        font-weight: 700;
+        padding-bottom: 0.2em;
     }
 
     & h2 {
-        font-size: var(--s2);
-        font-weight: var(--font-weight-bold);
-        margin-bottom: 0.5em;
+        font-size: 1.4rem;
+        font-weight: 700;
+        padding-bottom: 0.2em;
+        margin-top: 1.5em;
     }
 
     & h3 {
-        font-size: var(--s1);
-        font-weight: var(--font-weight-bold);
-        margin-bottom: 0.5em;
+        font-size: 1.25rem;
+        font-weight: 600;
     }
 
     & h4 {
-        font-size: var(--s0);
-        font-weight: var(--font-weight-bold);
-        margin-bottom: 0.5em;
+        font-size: 1rem;
+        font-weight: 600;
     }
 
     & h5 {
-        font-size: var(--s-1);
-        font-weight: var(--font-weight-bold);
-        margin-bottom: 0.5em;
+        font-size: 0.875rem;
+        font-weight: 600;
+    }
+
+    & h6 {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #6a737d;
+    }
+
+    & p {
+        margin-bottom: 0.8em;
+        line-height: 1.6;
+    }
+
+    & ul, & ol {
+        margin-bottom: 1.25em;
+        padding-left: 2em;
     }
 
     & ul {
         list-style: disc;
-        margin-left: 1.5em;
-        margin-bottom: 0.5em;
     }
 
-    & p {
-        margin-bottom: 0.5em;
+    & ol {
+        list-style: decimal;
+    }
+
+    & li {
+        margin-bottom: 0.25em;
+    }
+
+    & li > ul, & li > ol {
+        margin-top: 0.25em;
+        margin-bottom: 0.25em;
     }
 
     & hr {
         width: 100%;
         border: none;
-        border-top: 2px solid #E0E0E0;
+        border-top: 3px solid #E0E0E0;
         margin: 1em 0;
     }
 
     & blockquote {
-        border-left: 4px solid #E0E0E0;
-        padding: 0.5em 1em;
-        margin: 0.5em 0;
-        background-color: #fff;
+        border-left: 0.25em solid #dfe2e5;
+        padding: 0 1em;
+        margin: 0 0 1.25em 0;
+        color: #6a737d;
+    }
+
+    & blockquote > :first-child {
+        margin-top: 0;
+    }
+
+    & blockquote > :last-child {
+        margin-bottom: 0;
     }
 
     & pre {
-        background-color: #f1f3f4;
+        background-color: #f1f3f6;
         padding: 1em;
         overflow-x: auto;
-        border-radius: 4px;
-        margin: 0.5em 0;
+        border-radius: 3px;
+        margin: 0 0 1.25em 0;
+        font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+        border: 1px solid #dfe2e5;
+        font-size: 0.85em;
+        line-height: 1.45;
+
+        code {
+            background-color: transparent;
+            padding: 0;
+        }
+    }
+
+    & code {
+        background-color: rgba(27, 31, 35, 0.05);
+        border-radius: 3px;
+        font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+        font-size: 0.85em;
+        padding: 0.2em 0.4em;
     }
 
     & a {
-        &:link, &:visited {
+        color: #0366d6;
+        text-decoration: none;
+
+        &:hover {
             text-decoration: underline;
         }
+    }
 
-        &:active, &:hover {
-            color: #af416d;
-        }
+    & img {
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    & table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-bottom: 1.25em;
+        overflow: auto;
+    }
+
+    & table th, & table td {
+        border: 1px solid #dfe2e5;
+        padding: 0.5em 1em;
+    }
+
+    & table th {
+        font-weight: 600;
+        background-color: #f6f8fa;
+    }
+
+    & table tr:nth-child(2n) {
+        background-color: #f6f8fa;
     }
 }
 
@@ -198,4 +302,9 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.button-group {
+    display: flex;
+    gap: 0.5rem;
 }
