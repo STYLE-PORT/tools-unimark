@@ -1,15 +1,3 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-.rubik-bold {
-  font-family: "Rubik", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 500;
-  font-style: normal;
-}
-
-
 :root {
   --modular-ratio: 1.3090169944;
 
@@ -31,48 +19,10 @@
   --s-7: calc(var(--s-6) / var(--modular-ratio));
   --s-8: calc(var(--s-7) / var(--modular-ratio));
 
-  --r0: 1em;
-  --r1: calc(var(--r0) * var(--modular-ratio));
-  --r2: calc(var(--r1) * var(--modular-ratio));
-  --r3: calc(var(--r2) * var(--modular-ratio));
-  --r4: calc(var(--r3) * var(--modular-ratio));
-  --r5: calc(var(--r4) * var(--modular-ratio));
-  --r6: calc(var(--r5) * var(--modular-ratio));
-  --r7: calc(var(--r6) * var(--modular-ratio));
-  --r8: calc(var(--r7) * var(--modular-ratio));
-  --r-1: calc(var(--r0) / var(--modular-ratio));
-  --r-2: calc(var(--r-1) / var(--modular-ratio));
-  --r-3: calc(var(--r-2) / var(--modular-ratio));
-  --r-4: calc(var(--r-3) / var(--modular-ratio));
-  --r-5: calc(var(--r-4) / var(--modular-ratio));
-  --r-6: calc(var(--r-5) / var(--modular-ratio));
-  --r-7: calc(var(--r-6) / var(--modular-ratio));
-  --r-8: calc(var(--r-7) / var(--modular-ratio));
-
-  --measure--unit: 60em;
-  --measure: var(--measure--unit);
-  --measure2x: calc(var(--measure--unit) * 2);
-  --measure3x: calc(var(--measure--unit) * 3);
-  --measure4x: calc(var(--measure) * 4);
-  --measure-full: 100%;
-
-  --border-none: 0;
-  --border-width-thin: 1px;
-  --border-width-semibold: 2px;
-  --border-width-bold: 4px;
-
-  --border-thin: var(--border-width-thin) solid;
-  --border-semibold: var(--border-width-semibold) solid;
-  --border-bold: var(--border-width-bold) solid;
-
-  --border-dotted-thin: var(--border-width-thin) dotted;
-  --border-dotted-semibold: var(--border-width-semibold) dotted;
-  --border-dotted-bold: var(--border-width-bold) dotted;
-
   --font-family-fallback: -apple-system, BlinkMacSystemFont, Roboto, "Segoe UI", "Helvetica Neue", HelveticaNeue, YuGothic, "Yu Gothic Medium", "Yu Gothic", Verdana, Meiryo, sans-serif;
   --font-family-normal: var(--font-family-fallback);
   --font-family-rubik: "Rubik", var(--font-family-fallback);
-  --font-family-prompt: "Prompt", var(--font-family-fallback);
+  --font-family-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   --font-weight-bold: bold;
 
   font-family: var(--font-family-normal);
@@ -86,10 +36,7 @@
   --size-s: var(--s-1);
   --size-xs: var(--s-2);
   --size-xxs: var(--s-3);
-}
 
-
-:root {
   font-size: min(0.875rem, calc(0rem + 3.5vw));
 }
 
@@ -119,10 +66,6 @@ ol, ul {
   list-style: none;
 }
 
-ul ul {
-  margin-left: var(--s4);
-}
-
 img {
   max-width: 100%;
   height: auto;
@@ -131,4 +74,3 @@ img {
 button {
   font-size: inherit;
 }
-
