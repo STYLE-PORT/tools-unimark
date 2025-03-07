@@ -4,6 +4,7 @@ import {EditorArea} from "./components/EditorArea/EditorArea.tsx";
 import {useAppState} from "./hooks/useAppState";
 import {useClipboard} from "./hooks/useClipboard";
 import {useMarkdown} from "./hooks/useMarkdown";
+import {getPublicPath} from "./utils/paths";
 
 function App() {
   const {
@@ -41,7 +42,7 @@ function App() {
     <main className={styles.main}>
       <div className={styles.editorGroup}>
         <section className={`${styles.markdown} ${styles.pane}`}>
-          <h2 className={styles.title}><img className={styles.logo} src="/uni.svg" alt="Uni"/> Markdown</h2>
+          <h2 className={styles.title}><img className={styles.logo} src={getPublicPath('uni.svg')} alt="Uni"/> Markdown</h2>
           <EditorArea
             ref={inputRef}
             placeholder="Markdownのテキストを入力"
