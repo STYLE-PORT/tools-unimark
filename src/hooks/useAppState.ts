@@ -10,18 +10,18 @@ export const useAppState = () => {
     const urlParams = new URLSearchParams(window.location.search);
     const markdownParam = urlParams.get("markdown");
     const storedText = localStorage.getItem("text") || "";
-    
+
     // URLパラメータがある場合は、それを初期値として使用
     // 確認ダイアログはuseEffect内で表示する
     if (markdownParam) {
       return markdownParam;
     }
-    
+
     // パラメータがなく、localStorageに値がある場合
     if (storedText) {
       return storedText;
     }
-    
+
     return "";
   };
 
@@ -40,19 +40,19 @@ export const useAppState = () => {
 
     const urlParams = new URLSearchParams(window.location.search);
     const markdownParam = urlParams.get("markdown");
-    
+
     if (!markdownParam) return; // パラメータがなければ何もしない
-    
+
     const storedText = localStorage.getItem("text") || "";
-    
+
     // 値が異なる場合、確認ダイアログを表示
     if (storedText && markdownParam !== storedText) {
       const useParam = window.confirm(
         "URLパラメータのテキストがセッションに保存されたテキストと異なります。\n\n" +
-        "「OK」を押すとURLパラメータのテキストを使用します。\n" +
-        "「キャンセル」を押すとセッションに保存されたテキストを使用します。"
+          "「OK」を押すとURLパラメータのテキストを使用します。\n" +
+          "「キャンセル」を押すとセッションに保存されたテキストを使用します。",
       );
-      
+
       if (useParam) {
         // URLパラメータを使用し、localStorageにも保存
         setText(markdownParam);
@@ -66,7 +66,7 @@ export const useAppState = () => {
       setText(markdownParam);
       localStorage.setItem("text", markdownParam);
     }
-    
+
     // パラメータを削除（画面リフレッシュなし）
     const newUrl = window.location.pathname + window.location.hash;
     window.history.replaceState({}, document.title, newUrl);

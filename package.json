@@ -7,9 +7,9 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
-    "format": "biome format --write .",
-    "lint": "biome lint .",
-    "check": "biome check --apply ."
+    "format": "biome format --write ./src",
+    "lint": "biome lint ./src",
+    "check": "biome check --apply ./src"
   },
   "dependencies": {
     "dompurify": "^3.2.0",

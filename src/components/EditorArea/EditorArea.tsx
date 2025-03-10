@@ -1,6 +1,6 @@
-import {forwardRef} from "react";
-import {useEditorState} from "./hooks/useEditorState";
+import { forwardRef } from "react";
 import styles from "./EditorArea.module.css";
+import { useEditorState } from "./hooks/useEditorState";
 
 type Props = {
   readonly className?: string;
@@ -11,12 +11,13 @@ type Props = {
 };
 
 export const EditorArea = forwardRef<HTMLTextAreaElement, Props>(
-  (
-    {onInput, onChange, value: initialValue, className, ...rest},
-    ref
-  ) => {
-    const {value, onChange: handleChange, onInput: handleInput, onKeyDown} =
-      useEditorState(initialValue, {onChange, onInput});
+  ({ onInput, onChange, value: initialValue, className, ...rest }, ref) => {
+    const {
+      value,
+      onChange: handleChange,
+      onInput: handleInput,
+      onKeyDown,
+    } = useEditorState(initialValue, { onChange, onInput });
 
     return (
       <textarea
@@ -29,7 +30,7 @@ export const EditorArea = forwardRef<HTMLTextAreaElement, Props>(
         className={`${styles.textarea} ${className || ""}`}
       />
     );
-  }
+  },
 );
 
 EditorArea.displayName = "EditorArea";

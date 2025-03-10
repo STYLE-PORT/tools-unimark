@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { ChangeEvent, FormEvent, KeyboardEvent } from "react";
 import { useIndentation } from "./useIndentation";
 
@@ -7,10 +7,7 @@ type EditorCallbacks = {
   readonly onInput?: (value: string) => void;
 };
 
-export const useEditorState = (
-  initialValue: string | undefined,
-  callbacks: EditorCallbacks
-) => {
+export const useEditorState = (initialValue: string | undefined, callbacks: EditorCallbacks) => {
   const [value, setValue] = useState(initialValue);
   const { handleIndentation } = useIndentation();
 
@@ -27,7 +24,7 @@ export const useEditorState = (
       setValue(newValue);
       callbacks.onChange?.(newValue);
     },
-    [callbacks]
+    [callbacks],
   );
 
   const onInput = useCallback(
@@ -36,7 +33,7 @@ export const useEditorState = (
       setValue(newValue);
       callbacks.onInput?.(newValue);
     },
-    [callbacks]
+    [callbacks],
   );
 
   const onKeyDown = useCallback(
@@ -46,12 +43,7 @@ export const useEditorState = (
         const textarea = e.currentTarget;
         const { selectionStart, selectionEnd, value: currentValue } = textarea;
 
-        const result = handleIndentation(
-          currentValue,
-          selectionStart,
-          selectionEnd,
-          !e.shiftKey
-        );
+        const result = handleIndentation(currentValue, selectionStart, selectionEnd, !e.shiftKey);
 
         setValue(result.newValue);
         callbacks.onInput?.(result.newValue);
@@ -63,7 +55,7 @@ export const useEditorState = (
         }, 0);
       }
     },
-    [callbacks, handleIndentation]
+    [callbacks, handleIndentation],
   );
 
   return {

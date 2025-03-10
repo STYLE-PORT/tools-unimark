@@ -9,7 +9,7 @@ export const useIndentation = () => {
     value: string,
     selectionStart: number,
     selectionEnd: number,
-    isIndent: boolean
+    isIndent: boolean,
   ): IndentationResult => {
     const indentString = " ".repeat(2);
     const lines = value.split("\n");
@@ -34,10 +34,10 @@ export const useIndentation = () => {
       for (let i = startLineIndex; i <= endLineIndex; i++) {
         // 行の先頭にあるすべてのスペースを検出
         const leadingSpaces = lines[i].match(/^[ ]+/)?.[0] || "";
-        
+
         // 削除するスペースの数（最大でindentString.lengthまで）
         const count = Math.min(indentString.length, leadingSpaces.length);
-        
+
         lines[i] = lines[i].substring(count);
         totalCount += count;
         if (i === startLineIndex) {

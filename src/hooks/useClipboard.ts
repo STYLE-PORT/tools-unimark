@@ -22,7 +22,7 @@ export const useClipboard = (elementRef: React.RefObject<HTMLElement>) => {
 
       selection?.removeAllRanges();
     },
-    [elementRef]
+    [elementRef],
   );
 
   return { copyToClipboard };
