@@ -18,6 +18,8 @@
     display: flex;
     flex-direction: column;
     min-height: 0;
+    max-height: 100%;
+    overflow: hidden;
 }
 
 .markdown {
@@ -37,6 +39,7 @@
     flex-direction: column;
     gap: 0.5rem;
     height: 100%;
+    overflow: hidden;
 }
 
 .input {
@@ -90,16 +93,19 @@
         border-color: #777;
     }
 }
-
 .output {
     flex: 1;
     overflow-y: auto;
+    overflow-x: auto;
+    overflow-wrap: break-word;
     background-color: #f8f9fa;
     border-radius: 4px;
     padding: 1rem;
     min-height: 0;
+    max-height: calc(100% - 80px); /* ボタンとタイトルの高さを考慮 */
     line-height: 1.4;
     font-size: 16px;
+    color: #333;
     color: #333;
 
     & h1, & h2, & h3, & h4, & h5, & h6 {
@@ -302,6 +308,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-shrink: 0;
 }
 
 .button-group {
