@@ -93,10 +93,10 @@ export const useAppState = () => {
   }, []);
 
   // テキストをURLパラメータとして含めたURLを生成しコピーする
-  const copyAsUrl = useCallback(() => {
+  const copyAsUrl = useCallback(async () => {
     const url = new URL(window.location.href);
     url.search = new URLSearchParams({ markdown: text }).toString();
-    navigator.clipboard.writeText(url.toString());
+    await navigator.clipboard.writeText(url.toString());
     showCopyStatusWithTimeout();
   }, [text, showCopyStatusWithTimeout]);
 
