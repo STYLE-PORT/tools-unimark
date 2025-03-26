@@ -1,4 +1,5 @@
 import { forwardRef } from "react";
+import clsx from "clsx";
 import styles from "./EditorArea.module.css";
 import { useEditorState } from "./hooks/useEditorState";
 
@@ -27,7 +28,7 @@ export const EditorArea = forwardRef<HTMLTextAreaElement, Props>(
         onChange={handleChange}
         onInput={handleInput}
         onKeyDown={onKeyDown}
-        className={`${styles.textarea} ${className || ""}`}
+        className={clsx(styles.textarea, className)}
       />
     );
   },

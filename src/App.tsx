@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import clsx from "clsx";
 import styles from "./App.module.css";
 import { EditorArea } from "./components/EditorArea/EditorArea.tsx";
 import { useAppState } from "./hooks/useAppState";
@@ -33,7 +34,7 @@ function App() {
   return (
     <main className={styles.main}>
       <div className={styles.editorGroup}>
-        <section className={`${styles.markdown} ${styles.pane}`}>
+        <section className={clsx(styles.markdown, styles.pane)}>
           <h2 className={styles.title}>
             <img className={styles.logo} src={getPublicPath("uni.svg")} alt="Uni" /> Markdown
           </h2>
@@ -45,7 +46,7 @@ function App() {
             value={text}
           />
         </section>
-        <section className={`${styles.outputGroup} ${styles.pane}`}>
+        <section className={clsx(styles.outputGroup, styles.pane)}>
           <h2 className={styles.title}>HTML</h2>
           <section ref={outputRef} className={styles.output} dangerouslySetInnerHTML={{ __html: html }} />
           <div className={styles.controls}>
@@ -54,17 +55,17 @@ function App() {
               見出しを太字としてレンダリング
             </label>
             <div className={styles.buttonGroup}>
-              <button type="button" className={`${styles.button} ${styles.isPrimary}`} onClick={handleCopy}>
+              <button type="button" className={clsx(styles.button, styles.isPrimary)} onClick={handleCopy}>
                 Copy
               </button>
-              <button type="button" className={`${styles.button} ${styles.isSecondary}`} onClick={copyAsUrl}>
+              <button type="button" className={clsx(styles.button, styles.isSecondary)} onClick={copyAsUrl}>
                 Copy as URL
               </button>
             </div>
           </div>
         </section>
       </div>
-      <div className={`${styles.ticker} ${showCopyStatus ? styles.show : ""}`}>コピーしました！</div>
+      <div className={clsx(styles.ticker, showCopyStatus && styles.show)}>コピーしました！</div>
     </main>
   );
 }
