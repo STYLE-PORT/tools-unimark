@@ -1,51 +1,83 @@
-# React + TypeScript + Vite
+# UNIMARK
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![UNIMARK](docs/unimark-logo.svg)
 
-Currently, two official plugins are available:
+UNIMARK は、マークダウンをプレーンな HTML に出力して、コピペをするツールです。
+これによって、マークダウンで書かれたテキストを、Confluence や Slack、Notion などのリッチテキストエディタに統一したスタイリングでコピペできます。
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+uni(唯一の)markdown から unimark としたのですが、ウニという文字が浮かんだので ✹ UNIMARK ✹ となりました
 
-## Expanding the ESLint configuration
+App URL: https://style-port.github.io/tools-unimark/
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+![Screenshot](docs/screenshot.jpg)
 
-- Configure the top-level `parserOptions` property like this:
+## 特徴
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+- マークダウンを HTML に変換（[marked.js](https://marked.js.org/)を使用）
+- 統一したスタイリングでコピペ可能
+- タブインデント機能付きエディタ
+- `?markdown=` で、URL として Markdown を共有可能
+- localStorage による一時保存
+
+## 使い方
+
+1. マークダウンテキストを入力
+2. 変換ボタンを押す
+3. 生成された HTML をコピー
+
+### エディタの機能
+
+- **タブインデント**: Tab キーで 2 スペースのインデントを挿入
+- **複数行インデント**: 複数行を選択して Tab キーを押すと、選択した全ての行にインデントを適用
+- **インデント解除**: Shift+Tab で 2 スペース分のインデントを解除
+
+## 開発
+
+### 必要要件
+
+- Node.js >= 18
+- npm >= 9
+
+### セットアップ
+
+```bash
+# リポジトリのクローン
+git clone https://github.com/STYLE-PORT/tools-unimark
+cd tools-unimark
+
+# 依存パッケージのインストール
+npm i
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+### 開発サーバーの起動
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+```bash
+npm run dev
 ```
-# tools-unimark
+
+開発サーバーが http://localhost:5173 で起動します。
+
+### ビルド
+
+```bash
+npm run build
+```
+
+ビルドされたファイルは `dist` ディレクトリに出力されます。
+
+### プレビュー
+
+```bash
+npm run preview
+```
+
+ビルドされたアプリケーションをローカルでプレビューできます。
+
+## デプロイ
+
+GitHub Pages でホストしています。
+`main` ブランチにプッシュすると自動的にデプロイされます。
+
+## ライセンス
+
+このプロジェクトは MIT ライセンスの下で公開されています。
