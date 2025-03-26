@@ -14,6 +14,9 @@ export const useClipboard = (elementRef: React.RefObject<HTMLElement>) => {
       }
 
       try {
+        // document.execCommand("copy")は非推奨ですが、
+        // リッチテキスト（HTML形式）をコピーするために必要です。
+        // navigator.clipboard.writeTextはプレーンテキストのみをサポートしています。
         document.execCommand("copy");
         onCopySuccess();
       } catch (err) {
