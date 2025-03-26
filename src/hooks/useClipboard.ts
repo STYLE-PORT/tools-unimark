@@ -2,7 +2,7 @@ import { useCallback } from "react";
 
 export const useClipboard = (elementRef: React.RefObject<HTMLElement>) => {
   const copyToClipboard = useCallback(
-    (onCopySuccess: () => void) => {
+    (option?: { onCopySuccess?: () => void }) => {
       if (!elementRef.current) return;
 
       const range = document.createRange();
@@ -18,7 +18,7 @@ export const useClipboard = (elementRef: React.RefObject<HTMLElement>) => {
         // リッチテキスト（HTML形式）をコピーするために必要です。
         // navigator.clipboard.writeTextはプレーンテキストのみをサポートしています。
         document.execCommand("copy");
-        onCopySuccess();
+        option?.onCopySuccess?.();
       } catch (err) {
         console.error(err);
       }

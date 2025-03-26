@@ -28,7 +28,7 @@ function App() {
   }, [text, convertToHtml, setHtml]);
 
   const handleCopy = () => {
-    copyToClipboard(showCopyStatusWithTimeout);
+    copyToClipboard({ onCopySuccess: showCopyStatusWithTimeout });
   };
 
   return (
