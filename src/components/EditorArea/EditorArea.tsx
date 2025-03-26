@@ -1,14 +1,13 @@
-import { forwardRef } from "react";
+import { forwardRef, ComponentPropsWithRef } from "react";
 import clsx from "clsx";
 import styles from "./EditorArea.module.css";
 import { useEditorState } from "./hooks/useEditorState";
 
-type Props = {
-  readonly className?: string;
+type TextAreaProps = ComponentPropsWithRef<"textarea">;
+type Props = Omit<TextAreaProps, "onChange" | "onInput" | "value" | "onKeyDown"> & {
   readonly onChange?: (value: string) => void;
   readonly onInput?: (value: string) => void;
   readonly value?: string;
-  readonly placeholder?: string;
 };
 
 export const EditorArea = forwardRef<HTMLTextAreaElement, Props>(
