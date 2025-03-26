@@ -9,7 +9,7 @@ export const useIndentation = () => {
     value: string,
     selectionStart: number,
     selectionEnd: number,
-    isIndent: boolean,
+    type: 'indent' | 'outdent',
   ): IndentationResult => {
     const indentString = " ".repeat(2);
     const lines = value.split("\n");
@@ -19,7 +19,7 @@ export const useIndentation = () => {
     const startLineIndex = value.substring(0, selectionStart).split("\n").length - 1;
     const endLineIndex = value.substring(0, selectionEnd).split("\n").length - 1;
 
-    if (isIndent) {
+    if (type === 'indent') {
       let count = 0;
       for (let i = startLineIndex; i <= endLineIndex; i++) {
         lines[i] = indentString + lines[i];
@@ -28,7 +28,7 @@ export const useIndentation = () => {
 
       startAdjustmentCount = indentString.length;
       endAdjustmentCount = count;
-    } else {
+    } else if (type === 'outdent') {
       let firstLineCount = 0;
       let totalCount = 0;
       for (let i = startLineIndex; i <= endLineIndex; i++) {

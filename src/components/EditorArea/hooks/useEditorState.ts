@@ -43,7 +43,7 @@ export const useEditorState = (initialValue: string | undefined, callbacks: Edit
         const textarea = e.currentTarget;
         const { selectionStart, selectionEnd, value: currentValue } = textarea;
 
-        const result = handleIndentation(currentValue, selectionStart, selectionEnd, !e.shiftKey);
+        const result = handleIndentation(currentValue, selectionStart, selectionEnd, !e.shiftKey ? 'indent' : 'outdent');
 
         setValue(result.newValue);
         callbacks.onInput?.(result.newValue);
