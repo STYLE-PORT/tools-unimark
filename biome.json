@@ -30,7 +30,7 @@
   },
   "javascript": {
     "formatter": {
-      "quoteStyle": "double",
+      "quoteStyle": "single",
       "trailingComma": "all",
       "semicolons": "always"
     }

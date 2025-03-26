@@ -1,11 +1,11 @@
-import { useEffect, useRef } from "react";
-import clsx from "clsx";
-import styles from "./App.module.css";
-import { EditorArea } from "./components/EditorArea/EditorArea.tsx";
-import { useAppState } from "./hooks/useAppState";
-import { useClipboard } from "./hooks/useClipboard";
-import { useMarkdown } from "./hooks/useMarkdown";
-import { getPublicPath } from "./utils/paths";
+import { useEffect, useRef } from 'react';
+import clsx from 'clsx';
+import styles from './App.module.css';
+import { EditorArea } from './components/EditorArea/EditorArea.tsx';
+import { useAppState } from './hooks/useAppState';
+import { useClipboard } from './hooks/useClipboard';
+import { useMarkdown } from './hooks/useMarkdown';
+import { getPublicPath } from './utils/paths';
 
 function App() {
   const { text, html, showCopyStatus, isBold, updateText, setHtml, showCopyStatusWithTimeout, toggleBold, copyAsUrl } =
@@ -36,7 +36,7 @@ function App() {
       <div className={styles.editorGroup}>
         <section className={clsx(styles.markdown, styles.pane)}>
           <h2 className={styles.title}>
-            <img className={styles.logo} src={getPublicPath("uni.svg")} alt="Uni" /> Markdown
+            <img className={styles.logo} src={getPublicPath('uni.svg')} alt="Uni" /> Markdown
           </h2>
           <EditorArea
             ref={inputRef}

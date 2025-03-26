@@ -1,10 +1,10 @@
-import { forwardRef, ComponentPropsWithRef } from "react";
-import clsx from "clsx";
-import styles from "./EditorArea.module.css";
-import { useEditorState } from "./hooks/useEditorState";
+import { forwardRef, ComponentPropsWithRef } from 'react';
+import clsx from 'clsx';
+import styles from './EditorArea.module.css';
+import { useEditorState } from './hooks/useEditorState';
 
-type TextAreaProps = ComponentPropsWithRef<"textarea">;
-type Props = Omit<TextAreaProps, "onChange" | "onInput" | "value" | "onKeyDown"> & {
+type TextAreaProps = ComponentPropsWithRef<'textarea'>;
+type Props = Omit<TextAreaProps, 'onChange' | 'onInput' | 'value' | 'onKeyDown'> & {
   readonly onChange?: (value: string) => void;
   readonly onInput?: (value: string) => void;
   readonly value?: string;
@@ -33,4 +33,4 @@ export const EditorArea = forwardRef<HTMLTextAreaElement, Props>(
   },
 );
 
-EditorArea.displayName = "EditorArea";
+EditorArea.displayName = 'EditorArea';

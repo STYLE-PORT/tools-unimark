@@ -13,7 +13,7 @@
  */
 export const getPublicPath = (path: string): string => {
   // パスの先頭にスラッシュがある場合は削除
-  const cleanPath = path.startsWith("/") ? path.slice(1) : path;
+  const cleanPath = path.startsWith('/') ? path.slice(1) : path;
   // import.meta.env.BASE_URLは末尾にスラッシュを含む
   return `${import.meta.env.BASE_URL}${cleanPath}`;
 };

@@ -1,7 +1,7 @@
-import DOMPurify from "dompurify";
-import { marked } from "marked";
-import type { Renderer } from "marked";
-import { useCallback, useMemo } from "react";
+import DOMPurify from 'dompurify';
+import { marked } from 'marked';
+import type { Renderer } from 'marked';
+import { useCallback, useMemo } from 'react';
 
 marked.use({
   breaks: true,

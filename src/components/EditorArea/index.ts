@@ -1,1 +1,1 @@
-export { EditorArea } from "./EditorArea";
+export { EditorArea } from './EditorArea';

@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useState } from "react";
-import type { ChangeEvent, FormEvent, KeyboardEvent } from "react";
-import { useIndentation } from "./useIndentation";
+import { useCallback, useEffect, useState } from 'react';
+import type { ChangeEvent, FormEvent, KeyboardEvent } from 'react';
+import { useIndentation } from './useIndentation';
 
 type EditorCallbacks = {
   readonly onChange?: (value: string) => void;
@@ -38,12 +38,17 @@ export const useEditorState = (initialValue: string | undefined, callbacks: Edit
 
   const onKeyDown = useCallback(
     (e: KeyboardEvent<HTMLTextAreaElement>) => {
-      if (e.key === "Tab") {
+      if (e.key === 'Tab') {
         e.preventDefault();
         const textarea = e.currentTarget;
         const { selectionStart, selectionEnd, value: currentValue } = textarea;
 
-        const result = handleIndentation(currentValue, selectionStart, selectionEnd, !e.shiftKey ? 'indent' : 'outdent');
+        const result = handleIndentation(
+          currentValue,
+          selectionStart,
+          selectionEnd,
+          !e.shiftKey ? 'indent' : 'outdent',
+        );
 
         setValue(result.newValue);
         callbacks.onInput?.(result.newValue);

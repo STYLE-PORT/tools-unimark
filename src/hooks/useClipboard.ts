@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback } from 'react';
 
 export const useClipboard = (elementRef: React.RefObject<HTMLElement>) => {
   const copyToClipboard = useCallback(
@@ -17,7 +17,7 @@ export const useClipboard = (elementRef: React.RefObject<HTMLElement>) => {
         // document.execCommand("copy")は非推奨ですが、
         // リッチテキスト（HTML形式）をコピーするために必要です。
         // navigator.clipboard.writeTextはプレーンテキストのみをサポートしています。
-        document.execCommand("copy");
+        document.execCommand('copy');
         option?.onCopySuccess?.();
       } catch (err) {
         console.error(err);
