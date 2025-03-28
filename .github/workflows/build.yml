@@ -1,9 +1,13 @@
 name: Build and Test
 
 on:
+  pull_request:
+    types: [ opened, synchronize, reopened ]
   push:
     branches:
-      - '*'
+      - main
+      - release/*
+      - topic/*
   workflow_dispatch:
 
 permissions:
