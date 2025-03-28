@@ -18,6 +18,8 @@
     display: flex;
     flex-direction: column;
     min-height: 0;
+    max-height: 100%;
+    overflow: hidden;
 }
 
 .markdown {
@@ -32,11 +34,18 @@
     width: calc(100% - 1rem);
 }
 
+@media (max-width: 768px) {
+    .editor-group {
+        flex-direction: column;
+    }
+}
+
 .output-group {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
     height: 100%;
+    overflow: hidden;
 }
 
 .input {
@@ -90,14 +99,16 @@
         border-color: #777;
     }
 }
-
 .output {
     flex: 1;
     overflow-y: auto;
+    overflow-x: auto;
+    overflow-wrap: break-word;
     background-color: #f8f9fa;
     border-radius: 4px;
     padding: 1rem;
     min-height: 0;
+    max-height: calc(100% - 80px); /* ボタンとタイトルの高さを考慮 */
     line-height: 1.4;
     font-size: 16px;
     color: #333;
@@ -300,11 +311,26 @@
 .controls {
     padding: 0.5rem 0;
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
+    flex-shrink: 0;
+    gap: 0.5rem;
+}
+
+@media (max-width: 768px) {
+    .controls {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .button-group {
+        align-self: flex-end;
+    }
 }
 
 .button-group {
     display: flex;
     gap: 0.5rem;
+    margin-left: auto;
 }
