@@ -19,14 +19,15 @@
   --s-7: calc(var(--s-6) / var(--modular-ratio));
   --s-8: calc(var(--s-7) / var(--modular-ratio));
 
-  --font-family-fallback: -apple-system, BlinkMacSystemFont, Roboto, "Segoe UI", "Helvetica Neue", HelveticaNeue, YuGothic, "Yu Gothic Medium", "Yu Gothic", Verdana, Meiryo, sans-serif;
+  --font-family-fallback: -apple-system, BlinkMacSystemFont, Roboto, "Segoe UI", "Helvetica Neue", HelveticaNeue,
+    YuGothic, "Yu Gothic Medium", "Yu Gothic", Verdana, Meiryo, sans-serif;
   --font-family-normal: var(--font-family-fallback);
   --font-family-rubik: "Rubik", var(--font-family-fallback);
   --font-family-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   --font-weight-bold: bold;
 
   font-family: var(--font-family-normal);
-  font-feature-settings: 'palt';
+  font-feature-settings: "palt";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
@@ -45,13 +46,31 @@ html {
   text-decoration: none;
 }
 
-:where(*:not(html)), :where(*::before), :where(*:after) {
+:where(*:not(html)),
+:where(*::before),
+:where(*:after) {
   box-sizing: inherit;
   color: inherit;
   background: none;
 }
 
-body, h1, h2, h3, h4, h5, h6, p, ol, ul, button, data, time, code, input, *::before, *::after {
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ol,
+ul,
+button,
+data,
+time,
+code,
+input,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   border-width: 0;
@@ -62,7 +81,8 @@ a {
   text-decoration: inherit;
 }
 
-ol, ul {
+ol,
+ul {
   list-style: none;
 }
 
