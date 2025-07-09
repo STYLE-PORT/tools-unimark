@@ -1,29 +1,55 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import {useCallback, useEffect, useRef, useState} from 'react';
 import clsx from 'clsx';
-import { ArrowLeftToLine, ArrowRightToLine } from 'lucide-react';
+import {ArrowLeftToLine, ArrowRightToLine} from 'lucide-react';
 import styles from './App.module.css';
-import { EditorArea } from './components/EditorArea/EditorArea.tsx';
-import { useAppState } from './hooks/useAppState';
-import { useClipboard } from './hooks/useClipboard';
-import { useMarkdown } from './hooks/useMarkdown';
-import { getPublicPath } from './utils/paths';
+import {EditorArea} from './components/EditorArea/EditorArea.tsx';
+import {useAppState} from './hooks/useAppState';
+import {useClipboard} from './hooks/useClipboard';
+import {useMarkdown} from './hooks/useMarkdown';
+import {getPublicPath} from './utils/paths';
 
 function App() {
-  const { text, html, showCopyStatus, isBold, updateText, setHtml, showCopyStatusWithTimeout, toggleBold, copyAsUrl, updateUrlParams } =
-    useAppState();
+  const {
+    text,
+    html,
+    showCopyStatus,
+    isBold,
+    updateText,
+    setHtml,
+    showCopyStatusWithTimeout,
+    toggleBold,
+    copyAsUrl,
+    updateUrlParams,
+  } = useAppState();
 
   const outputRef = useRef<HTMLElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const { convertToHtml } = useMarkdown(isBold);
-  const { copyToClipboard } = useClipboard(outputRef);
-  
+  const {convertToHtml} = useMarkdown(isBold);
+  const {copyToClipboard} = useClipboard(outputRef);
+
   // URLパラメータから初期状態を決定
   const searchParams = new URLSearchParams(window.location.search);
   const isPreviewMode = searchParams.get('p') === '1' || searchParams.get('preview') === '1';
-  
-  const [showEditor, setShowEditor] = useState(!isPreviewMode);
+
+  // localStorageから初期値を取得
+  const getInitialShowEditor = () => {
+    // URLパラメータがある場合はそれを優先
+    if (searchParams.has('p') || searchParams.has('preview')) {
+      return !isPreviewMode;
+    }
+    // localStorageの値を使用（デフォルトはtrue）
+    const saved = localStorage.getItem('showEditor');
+    return saved !== null ? saved === 'true' : true;
+  };
+
+  const getInitialPaneWidth = () => {
+    const saved = localStorage.getItem('leftPaneWidth');
+    return saved !== null ? Number.parseFloat(saved) : 50;
+  };
+
+  const [showEditor, setShowEditor] = useState(getInitialShowEditor());
   const [isAnimating, setIsAnimating] = useState(false);
-  const [leftPaneWidth, setLeftPaneWidth] = useState(50);
+  const [leftPaneWidth, setLeftPaneWidth] = useState(getInitialPaneWidth());
   const [isResizing, setIsResizing] = useState(false);
   const resizeHandleRef = useRef<HTMLDivElement>(null);
 
@@ -48,15 +74,16 @@ function App() {
   }, [text, convertToHtml, setHtml]);
 
   const handleCopy = () => {
-    copyToClipboard({ onCopySuccess: showCopyStatusWithTimeout });
+    copyToClipboard({onCopySuccess: showCopyStatusWithTimeout});
   };
 
   const toggleEditor = () => {
     setIsAnimating(true);
     const newShowEditor = !showEditor;
     setShowEditor(newShowEditor);
+    localStorage.setItem('showEditor', String(newShowEditor));
     updateUrlParams(text, newShowEditor);
-    
+
     // アニメーション終了後にフラグをリセット
     setTimeout(() => {
       setIsAnimating(false);
@@ -71,16 +98,17 @@ function App() {
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (!isResizing) return;
-      
+
       const container = document.querySelector(`.${styles.editorGroup}`);
       if (!container) return;
-      
+
       const containerRect = container.getBoundingClientRect();
       const newWidth = ((e.clientX - containerRect.left) / containerRect.width) * 100;
-      
+
       // 幅を10%〜90%の範囲に制限
       if (newWidth >= 10 && newWidth <= 90) {
         setLeftPaneWidth(newWidth);
+        localStorage.setItem('leftPaneWidth', String(newWidth));
       }
     };
 
@@ -91,7 +119,7 @@ function App() {
     if (isResizing) {
       document.addEventListener('mousemove', handleMouseMove);
       document.addEventListener('mouseup', handleMouseUp);
-      
+
       return () => {
         document.removeEventListener('mousemove', handleMouseMove);
         document.removeEventListener('mouseup', handleMouseUp);
@@ -102,20 +130,15 @@ function App() {
   return (
     <main className={styles.main}>
       <div className={clsx(styles.editorGroup, isResizing && styles.isResizing, isAnimating && styles.isAnimating)}>
-        <section 
-          className={clsx(
-            styles.markdown, 
-            styles.pane,
-            !showEditor && styles.hidden,
-            isAnimating && styles.animating
-          )} 
-          style={{ 
+        <section
+          className={clsx(styles.markdown, styles.pane, !showEditor && styles.hidden, isAnimating && styles.animating)}
+          style={{
             flexBasis: showEditor ? `${leftPaneWidth}%` : '0%',
-            opacity: showEditor ? 1 : 0
+            opacity: showEditor ? 1 : 0,
           }}
         >
           <h2 className={styles.title}>
-            <img className={styles.logo} src={getPublicPath('uni.svg')} alt="Uni" /> Markdown
+            <img className={styles.logo} src={getPublicPath('uni.svg')} alt="Uni"/> Markdown
           </h2>
           <EditorArea
             ref={inputRef}
@@ -125,43 +148,47 @@ function App() {
             value={text}
           />
         </section>
-        
-        <div 
+
+        <div
           ref={resizeHandleRef}
           className={clsx(styles.resizeHandle, !showEditor && styles.hidden)}
           onMouseDown={handleMouseDown}
-          style={{ opacity: showEditor ? 1 : 0 }}
+          style={{opacity: showEditor ? 1 : 0}}
         />
-        
-        <section 
+
+        <section
           className={clsx(styles.outputGroup, styles.pane, !showEditor && styles.fullWidth)}
-          style={{ 
+          style={{
             flexBasis: showEditor ? `${100 - leftPaneWidth}%` : '100%',
-            flexGrow: showEditor ? 0 : 1
+            flexGrow: showEditor ? 0 : 1,
           }}
         >
           <div className={styles.titleBar}>
-            <button 
-              type="button" 
+            <button
+              type="button"
               className={styles.toggleButton}
               onClick={toggleEditor}
-              aria-label={showEditor ? "エディタを隠す" : "エディタを表示"}
+              aria-label={showEditor ? 'エディタを隠す' : 'エディタを表示'}
             >
-              {showEditor ? <ArrowLeftToLine size={18} /> : <ArrowRightToLine size={18} />}
+              {showEditor ? <ArrowLeftToLine size={18}/> : <ArrowRightToLine size={18}/>}
             </button>
-            <h2 className={styles.title}>HTML</h2>
+            <h2 className={styles.title}>Preview</h2>
           </div>
-          <section ref={outputRef} className={styles.output} dangerouslySetInnerHTML={{ __html: html }} />
+          <section ref={outputRef} className={styles.output} dangerouslySetInnerHTML={{__html: html}}/>
           <div className={styles.controls}>
             <label>
-              <input type="checkbox" className="mr-2" checked={isBold} onChange={toggleBold} />
-              見出しを太字としてレンダリング
+              <input type="checkbox" className="mr-2" checked={isBold} onChange={toggleBold}/>
+              &nbsp;見出しを太字としてレンダリング
             </label>
             <div className={styles.buttonGroup}>
               <button type="button" className={clsx(styles.button, styles.isPrimary)} onClick={handleCopy}>
                 Copy
               </button>
-              <button type="button" className={clsx(styles.button, styles.isSecondary)} onClick={() => copyAsUrl(showEditor)}>
+              <button
+                type="button"
+                className={clsx(styles.button, styles.isSecondary)}
+                onClick={() => copyAsUrl(showEditor)}
+              >
                 Copy as URL
               </button>
             </div>

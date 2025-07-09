@@ -5,6 +5,7 @@
   height: 100vh;
   overflow: hidden;
   padding: 1rem;
+  background-color: #f8f9fa;
 }
 
 .logo {
@@ -21,7 +22,6 @@
   min-height: 0;
   max-height: 100%;
   overflow: hidden;
-  transition: flex-basis 0.3s ease, opacity 0.3s ease;
 }
 
 .pane.animating {
@@ -35,6 +35,7 @@
 
 .pane.full-width {
   flex-basis: 100% !important;
+  background-color: white;
 }
 
 @media (max-width: 768px) {
@@ -94,16 +95,36 @@
   gap: 0.5rem;
   height: 100%;
   overflow: hidden;
+  position: relative;
+}
+
+.output-group.full-width {
+  background-color: white;
+  padding: 0;
+}
+
+.output-group.full-width .output {
+  box-shadow: none;
+  border-radius: 0;
+}
+
+.output-group.full-width .title-bar {
+  background-color: white;
+  padding: 1rem 1rem 0;
+  margin: 0 auto;
+  width: 100%;
 }
 
 .input {
-  border: 2px solid #ccc;
+  border: 2px solid #dee2e6;
   border-radius: 4px;
   font-size: var(--s0);
   resize: none;
   flex: 1;
   min-height: 0;
   padding: 0.5rem;
+  background-color: white;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .button {
@@ -153,14 +174,20 @@
   overflow-y: auto;
   overflow-x: auto;
   overflow-wrap: break-word;
-  background-color: #f8f9fa;
+  background-color: white;
   border-radius: 4px;
-  padding: 1rem;
+  padding: 2rem 1rem 5rem;
   min-height: 0;
-  max-height: calc(100% - 80px); /* ボタンとタイトルの高さを考慮 */
+  max-height: 100%;
   line-height: 1.4;
   font-size: 16px;
   color: #333;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+  width: 100%;
+  max-width: 60em;
+  margin-left: auto;
+  margin-right: auto;
 
   & h1,
   & h2,
@@ -306,21 +333,24 @@
     width: 100%;
     margin-bottom: 1.25em;
     overflow: auto;
+    font-size: 0.85em;
   }
 
   & table th,
   & table td {
-    border: 1px solid #dfe2e5;
-    padding: 0.5em 1em;
+    border: none;
+    padding: 0.8em;
+    text-align: left;
   }
 
   & table th {
-    font-weight: 600;
-    background-color: #f6f8fa;
+    font-weight: 700;
+    padding-bottom: 0.3em;
+    border-bottom: 2px solid lightgray;
   }
 
-  & table tr:nth-child(2n) {
-    background-color: #f6f8fa;
+  & table tr:not(:last-child) td {
+    border-bottom: 1px solid #f0f0f0;
   }
 }
 
@@ -364,21 +394,22 @@
   font-size: 1.25rem;
   font-weight: 700;
   padding: 0.5rem 1rem;
-  background-color: #f8f9fa;
+  background-color: white;
   border-radius: 4px;
   flex-grow: 1;
   max-height: fit-content;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .title-bar {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  height: 2.5rem;
+  min-height: 2.5rem;
 }
 
 .toggle-button {
-  background-color: #f8f9fa;
+  background-color: white;
   border: 1px solid #dee2e6;
   border-radius: 4px;
   padding: 0.25rem 0.5rem;
@@ -391,6 +422,7 @@
   min-width: 2rem;
   height: 2.5rem;
   box-sizing: border-box;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .toggle-button:hover {
@@ -400,7 +432,7 @@
 
 .resize-handle {
   width: 4px;
-  background-color: #e9ecef;
+  background-color: #dee2e6;
   cursor: col-resize;
   position: relative;
   flex-shrink: 0;
@@ -416,7 +448,7 @@
 }
 
 .resize-handle:hover {
-  background-color: #dee2e6;
+  background-color: #adb5bd;
 }
 
 .resize-handle::after {
@@ -443,19 +475,34 @@
 }
 
 .controls {
-  padding: 0.5rem 0;
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 2rem);
+  max-width: 80rem;
+  padding: 1rem;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  flex-shrink: 0;
   gap: 0.5rem;
+  background-color: rgba(255, 255, 255, 0);
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  z-index: 10;
 }
 
 @media (max-width: 768px) {
   .controls {
     flex-direction: column;
     align-items: flex-start;
+    left: 0.5rem;
+    right: 0.5rem;
+    bottom: 0.5rem;
   }
 
   .button-group {
