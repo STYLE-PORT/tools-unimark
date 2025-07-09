@@ -8,7 +8,8 @@ export const useAppState = () => {
   // 初期値の取得
   const getInitialText = (): string => {
     const urlParams = new URLSearchParams(window.location.search);
-    const markdownParam = urlParams.get('markdown');
+    // md= を優先、なければ markdown= を使用（互換性のため）
+    const markdownParam = urlParams.get('md') || urlParams.get('markdown');
     const storedText = localStorage.getItem('text') || '';
 
     // URLパラメータがある場合は、それを初期値として使用
@@ -39,7 +40,8 @@ export const useAppState = () => {
     initializedRef.current = true;
 
     const urlParams = new URLSearchParams(window.location.search);
-    const markdownParam = urlParams.get('markdown');
+    // md= を優先、なければ markdown= を使用（互換性のため）
+    const markdownParam = urlParams.get('md') || urlParams.get('markdown');
 
     if (!markdownParam) return; // パラメータがなければ何もしない
 
@@ -92,10 +94,37 @@ export const useAppState = () => {
     setIsBold((prev) => !prev);
   }, []);
 
-  // テキストをURLパラメータとして含めたURLを生成しコピーする
-  const copyAsUrl = useCallback(async () => {
+  // URLを更新する関数
+  const updateUrlParams = useCallback((newText: string, showEditor: boolean) => {
     const url = new URL(window.location.href);
-    url.search = new URLSearchParams({ markdown: text }).toString();
+    const params = new URLSearchParams();
+    
+    if (newText) {
+      params.set('md', newText);
+    }
+    
+    if (!showEditor) {
+      params.set('p', '1');
+    }
+    
+    url.search = params.toString();
+    window.history.replaceState({}, document.title, url.toString());
+  }, []);
+
+  // テキストをURLパラメータとして含めたURLを生成しコピーする
+  const copyAsUrl = useCallback(async (showEditor: boolean) => {
+    const url = new URL(window.location.href);
+    const params = new URLSearchParams();
+    
+    if (text) {
+      params.set('md', text);
+    }
+    
+    if (!showEditor) {
+      params.set('p', '1');
+    }
+    
+    url.search = params.toString();
     await navigator.clipboard.writeText(url.toString());
     showCopyStatusWithTimeout();
   }, [text, showCopyStatusWithTimeout]);
@@ -111,5 +140,6 @@ export const useAppState = () => {
     showCopyStatusWithTimeout,
     toggleBold,
     copyAsUrl,
+    updateUrlParams,
   } as const;
 };
