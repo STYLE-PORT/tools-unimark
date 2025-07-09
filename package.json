@@ -1,7 +1,7 @@
 {
   "name": "tools-unimark",
   "private": true,
-  "version": "0.1.1",
+  "version": "0.1.2",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -14,6 +14,7 @@
   "dependencies": {
     "clsx": "^2.1.1",
     "dompurify": "^3.2.0",
+    "lucide-react": "^0.525.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
@@ -26,6 +27,6 @@
     "marked": "^15.0.0",
     "postcss": "^8.4.35",
     "typescript": "~5.6.2",
-    "vite": "^5.4.10"
+    "vite": "^5.4.19"
   }
 }
