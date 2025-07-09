@@ -52,10 +52,23 @@ function App() {
   const [isAnimating, setIsAnimating] = useState(false);
   const [leftPaneWidth, setLeftPaneWidth] = useState(getInitialPaneWidth());
   const [isResizing, setIsResizing] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [mobileView, setMobileView] = useState<'markdown' | 'preview'>('markdown');
   const resizeHandleRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     inputRef.current?.focus();
+  }, []);
+
+  // モバイル判定
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   // テキスト変更時にURLを更新
@@ -417,17 +430,50 @@ function App() {
 
   return (
     <main className={styles.main}>
-      <div className={clsx(styles.editorGroup, isResizing && styles.isResizing, isAnimating && styles.isAnimating)}>
+      {/* モバイル用のビュー切り替えボタン */}
+      {isMobile && (
+        <div className={styles.mobileTabBar}>
+          <button
+            type="button"
+            className={clsx(styles.mobileTab, mobileView === 'markdown' && styles.active)}
+            onClick={() => setMobileView('markdown')}
+          >
+            Markdown
+          </button>
+          <button
+            type="button"
+            className={clsx(styles.mobileTab, mobileView === 'preview' && styles.active)}
+            onClick={() => setMobileView('preview')}
+          >
+            Preview
+          </button>
+        </div>
+      )}
+      
+      <div className={clsx(
+        styles.editorGroup, 
+        isResizing && styles.isResizing, 
+        isAnimating && styles.isAnimating,
+        isMobile && styles.mobile
+      )}>
         <section
-          className={clsx(styles.markdown, styles.pane, !showEditor && styles.hidden, isAnimating && styles.animating)}
+          className={clsx(
+            styles.markdown,
+            styles.pane,
+            !showEditor && styles.hidden,
+            isAnimating && styles.animating,
+            isMobile && mobileView !== 'markdown' && styles.mobileHidden
+          )}
           style={{
-            flexBasis: showEditor ? `${leftPaneWidth}%` : '0%',
-            opacity: showEditor ? 1 : 0,
+            flexBasis: isMobile ? '100%' : (showEditor ? `${leftPaneWidth}%` : '0%'),
+            opacity: (!isMobile && !showEditor) ? 0 : 1,
           }}
         >
-          <h2 className={styles.title}>
-            <img className={styles.logo} src={getPublicPath('uni.svg')} alt="Uni"/> Markdown
-          </h2>
+          {!isMobile && (
+            <h2 className={styles.title}>
+              <img className={styles.logo} src={getPublicPath('uni.svg')} alt="Uni"/> Markdown
+            </h2>
+          )}
           <EditorToolbar
             onBold={handleBold}
             onItalic={handleItalic}
@@ -446,31 +492,40 @@ function App() {
           />
         </section>
 
-        <div
-          ref={resizeHandleRef}
-          className={clsx(styles.resizeHandle, !showEditor && styles.hidden)}
-          onMouseDown={handleMouseDown}
-          style={{opacity: showEditor ? 1 : 0}}
-        />
+        {!isMobile && (
+          <div
+            ref={resizeHandleRef}
+            className={clsx(styles.resizeHandle, !showEditor && styles.hidden)}
+            onMouseDown={handleMouseDown}
+            style={{opacity: showEditor ? 1 : 0}}
+          />
+        )}
 
         <section
-          className={clsx(styles.outputGroup, styles.pane, !showEditor && styles.fullWidth)}
+          className={clsx(
+            styles.outputGroup, 
+            styles.pane, 
+            !showEditor && styles.fullWidth,
+            isMobile && mobileView !== 'preview' && styles.mobileHidden
+          )}
           style={{
-            flexBasis: showEditor ? `${100 - leftPaneWidth}%` : '100%',
-            flexGrow: showEditor ? 0 : 1,
+            flexBasis: isMobile ? '100%' : (showEditor ? `${100 - leftPaneWidth}%` : '100%'),
+            flexGrow: isMobile ? 1 : (showEditor ? 0 : 1),
           }}
         >
-          <div className={styles.titleBar}>
-            <button
-              type="button"
-              className={styles.toggleButton}
-              onClick={toggleEditor}
-              aria-label={showEditor ? 'エディタを隠す' : 'エディタを表示'}
-            >
-              {showEditor ? <ArrowLeftToLine size={18}/> : <ArrowRightToLine size={18}/>}
-            </button>
-            <h2 className={styles.title}>Preview</h2>
-          </div>
+          {!isMobile && (
+            <div className={styles.titleBar}>
+              <button
+                type="button"
+                className={styles.toggleButton}
+                onClick={toggleEditor}
+                aria-label={showEditor ? 'エディタを隠す' : 'エディタを表示'}
+              >
+                {showEditor ? <ArrowLeftToLine size={18}/> : <ArrowRightToLine size={18}/>}
+              </button>
+              <h2 className={styles.title}>Preview</h2>
+            </div>
+          )}
           <section ref={outputRef} className={styles.outputSection}>
             <output className={styles.output} dangerouslySetInnerHTML={{__html: html}}/>
           </section>

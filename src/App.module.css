@@ -38,11 +38,6 @@
   background-color: white;
 }
 
-@media (max-width: 768px) {
-  .pane {
-    flex-basis: auto !important;
-  }
-}
 
 .markdown {
   height: 100%;
@@ -54,15 +49,6 @@
   padding-left: 0.5rem;
 }
 
-@media (max-width: 768px) {
-  .markdown {
-    padding-right: 0;
-  }
-
-  .output-group {
-    padding-left: 0;
-  }
-}
 
 .editor-group {
   display: flex;
@@ -82,12 +68,6 @@
   transition: flex-basis 0.3s ease, opacity 0.3s ease;
 }
 
-@media (max-width: 768px) {
-  .editor-group {
-    flex-direction: column;
-    gap: 1rem;
-  }
-}
 
 .output-group {
   display: flex;
@@ -490,32 +470,103 @@
   z-index: 10;
 }
 
-/*@media (max-width: 768px) {*/
-/*  .resize-handle {*/
-/*    display: none;*/
-/*  }*/
-
-/*  .toggle-button {*/
-/*    display: none;*/
-/*  }*/
-/*}*/
-
-/*@media (max-width: 768px) {*/
-/*  .controls {*/
-/*    flex-direction: column;*/
-/*    align-items: flex-start;*/
-/*    left: 0.5rem;*/
-/*    right: 0.5rem;*/
-/*    bottom: 0.5rem;*/
-/*  }*/
-
-/*  .button-group {*/
-/*    align-self: flex-end;*/
-/*  }*/
-/*}*/
 
 .button-group {
   display: flex;
   gap: 0.5rem;
   margin-left: auto;
+}
+
+/* モバイル用スタイル */
+.mobile-tab-bar {
+  display: flex;
+  background-color: white;
+  border-bottom: 1px solid #dee2e6;
+  margin-bottom: 0.5rem;
+}
+
+.mobile-tab {
+  flex: 1;
+  padding: 0.75rem;
+  background-color: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  font-weight: 500;
+  color: #495057;
+  transition: all 0.2s ease;
+}
+
+.mobile-tab.active {
+  color: #007bff;
+  border-bottom-color: #007bff;
+}
+
+.mobile-tab:hover:not(.active) {
+  background-color: #f8f9fa;
+}
+
+.editor-group.mobile {
+  flex-direction: row;
+  overflow: hidden;
+}
+
+.pane.mobile-hidden {
+  display: none !important;
+}
+
+/* モバイルレスポンシブ対応 */
+@media (max-width: 768px) {
+  .main {
+    padding: 0.5rem;
+  }
+  
+  .editor-group {
+    gap: 0;
+  }
+  
+  .pane {
+    flex-basis: 100% !important;
+  }
+  
+  .markdown {
+    padding-right: 0;
+  }
+  
+  .output-group {
+    padding-left: 0;
+  }
+  
+  .resize-handle {
+    display: none;
+  }
+  
+  .toggle-button {
+    display: none;
+  }
+  
+  .controls {
+    width: calc(100% - 1rem);
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0.5rem;
+    padding: 0.75rem;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+  
+  .button-group {
+    align-self: stretch;
+    justify-content: center;
+  }
+  
+  .title {
+    font-size: 1.1rem;
+    padding: 0.4rem 0.8rem;
+  }
+  
+  .output-section {
+    padding: 1rem 0.5rem 4rem;
+  }
 }
