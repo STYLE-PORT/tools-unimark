@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import {ArrowLeftToLine, ArrowRightToLine} from 'lucide-react';
 import styles from './App.module.css';
 import {EditorArea} from './components/EditorArea/EditorArea.tsx';
+import {EditorToolbar} from './components/EditorToolbar/EditorToolbar.tsx';
 import {useAppState} from './hooks/useAppState';
 import {useClipboard} from './hooks/useClipboard';
 import {useMarkdown} from './hooks/useMarkdown';
@@ -77,7 +78,265 @@ function App() {
     copyToClipboard({onCopySuccess: showCopyStatusWithTimeout});
   };
 
-  const toggleEditor = () => {
+  // 日本語文字を判定
+  const isJapanese = (char: string) => {
+    const code = char.charCodeAt(0);
+    return (
+      (code >= 0x3040 && code <= 0x309f) || // ひらがな
+      (code >= 0x30a0 && code <= 0x30ff) || // カタカナ
+      (code >= 0x4e00 && code <= 0x9faf) || // 漢字
+      (code >= 0xff00 && code <= 0xffef) // 全角
+    );
+  };
+
+  // Markdownエディタの操作関数
+  const toggleMarkdown = useCallback(
+    (marker: string, placeholder?: string) => {
+      if (!inputRef.current) return;
+
+      const textarea = inputRef.current;
+      const {selectionStart, selectionEnd, value} = textarea;
+      const selectedText = value.substring(selectionStart, selectionEnd);
+      const markerLength = marker.length;
+
+      // まず、選択範囲の前後を確認して、すでにマーカーがあるかチェック
+      const beforeMarker = value.substring(selectionStart - markerLength, selectionStart);
+      const afterMarker = value.substring(selectionEnd, selectionEnd + markerLength);
+
+      let newText: string;
+      let newSelectionStart: number;
+      let newSelectionEnd: number;
+
+      // 選択範囲の前後にマーカーがある場合は削除
+      if (beforeMarker === marker && afterMarker === marker) {
+        newText =
+          value.substring(0, selectionStart - markerLength) +
+          selectedText +
+          value.substring(selectionEnd + markerLength);
+        newSelectionStart = selectionStart - markerLength;
+        newSelectionEnd = selectionEnd - markerLength;
+      }
+      // 選択範囲自体がマーカーで囲まれている場合をチェック（`*`と`**`を区別）
+      else if (
+        marker === '**' &&
+        selectedText.startsWith('**') &&
+        selectedText.endsWith('**') &&
+        selectedText.length >= 4
+      ) {
+        const innerText = selectedText.substring(2, selectedText.length - 2);
+        newText = value.substring(0, selectionStart) + innerText + value.substring(selectionEnd);
+        newSelectionStart = selectionStart;
+        newSelectionEnd = selectionStart + innerText.length;
+      } else if (
+        marker === '*' &&
+        selectedText.startsWith('*') &&
+        selectedText.endsWith('*') &&
+        !selectedText.startsWith('**') &&
+        !selectedText.endsWith('**') &&
+        selectedText.length >= 2
+      ) {
+        const innerText = selectedText.substring(1, selectedText.length - 1);
+        newText = value.substring(0, selectionStart) + innerText + value.substring(selectionEnd);
+        newSelectionStart = selectionStart;
+        newSelectionEnd = selectionStart + innerText.length;
+      } else if (
+        marker === '`' &&
+        selectedText.startsWith('`') &&
+        selectedText.endsWith('`') &&
+        selectedText.length >= 2
+      ) {
+        const innerText = selectedText.substring(1, selectedText.length - 1);
+        newText = value.substring(0, selectionStart) + innerText + value.substring(selectionEnd);
+        newSelectionStart = selectionStart;
+        newSelectionEnd = selectionStart + innerText.length;
+      }
+      // マーカーを追加
+      else {
+        const textToInsert = selectedText || placeholder || '';
+
+        // 日本語の場合、前後にスペースを追加
+        let prefix = '';
+        let suffix = '';
+
+        if (textToInsert) {
+          const beforeChar = value[selectionStart - 1] || '';
+          const afterChar = value[selectionEnd] || '';
+          const firstChar = textToInsert[0] || '';
+          const lastChar = textToInsert[textToInsert.length - 1] || '';
+
+          // 前にスペースが必要かチェック
+          if (
+            beforeChar &&
+            beforeChar !== ' ' &&
+            beforeChar !== '\n' &&
+            (isJapanese(beforeChar) || isJapanese(firstChar))
+          ) {
+            prefix = ' ';
+          }
+
+          // 後にスペースが必要かチェック
+          if (afterChar && afterChar !== ' ' && afterChar !== '\n' && (isJapanese(afterChar) || isJapanese(lastChar))) {
+            suffix = ' ';
+          }
+        }
+
+        newText =
+          value.substring(0, selectionStart) +
+          prefix +
+          marker +
+          textToInsert +
+          marker +
+          suffix +
+          value.substring(selectionEnd);
+        newSelectionStart = selectionStart + prefix.length + markerLength;
+        newSelectionEnd = selectionEnd + prefix.length + markerLength;
+      }
+
+      updateText(newText);
+
+      // カーソル位置を調整
+      setTimeout(() => {
+        textarea.selectionStart = newSelectionStart;
+        textarea.selectionEnd = newSelectionEnd;
+        textarea.focus();
+      }, 0);
+    },
+    [updateText],
+  );
+
+  const handleBold = useCallback(() => toggleMarkdown('**', '太字'), [toggleMarkdown]);
+  const handleItalic = useCallback(() => toggleMarkdown('*', 'イタリック'), [toggleMarkdown]);
+  const handleLink = useCallback(() => {
+    if (!inputRef.current) return;
+    const textarea = inputRef.current;
+    const {selectionStart, selectionEnd, value} = textarea;
+    const selectedText = value.substring(selectionStart, selectionEnd) || 'リンクテキスト';
+    const newText = `${value.substring(0, selectionStart)}[${selectedText}](https://)${value.substring(selectionEnd)}`;
+    updateText(newText);
+    setTimeout(() => {
+      const urlStart = selectionStart + selectedText.length + 3;
+      textarea.selectionStart = urlStart;
+      textarea.selectionEnd = urlStart + 8;
+      textarea.focus();
+    }, 0);
+  }, [updateText]);
+  const handleList = useCallback(() => {
+    if (!inputRef.current) return;
+    const textarea = inputRef.current;
+    const {selectionStart, selectionEnd, value} = textarea;
+
+    // 選択範囲の行を取得
+    const lineStart = value.lastIndexOf('\n', selectionStart - 1) + 1;
+    const lineEnd = value.indexOf('\n', selectionEnd);
+    const endPos = lineEnd === -1 ? value.length : lineEnd;
+
+    const selectedLines = value.substring(lineStart, endPos);
+    const lines = selectedLines.split('\n');
+
+    const newLines = lines.map((line) => {
+      // すでにリストアイテムの場合はスキップ
+      if (line.trim().startsWith('- ')) return line;
+      return `- ${line}`;
+    });
+
+    const newText = value.substring(0, lineStart) + newLines.join('\n') + value.substring(endPos);
+    updateText(newText);
+
+    setTimeout(() => {
+      textarea.selectionStart = lineStart;
+      textarea.selectionEnd = lineStart + newLines.join('\n').length;
+      textarea.focus();
+    }, 0);
+  }, [updateText]);
+
+  const handleOrderedList = useCallback(() => {
+    if (!inputRef.current) return;
+    const textarea = inputRef.current;
+    const {selectionStart, selectionEnd, value} = textarea;
+
+    // 選択範囲の行を取得
+    const lineStart = value.lastIndexOf('\n', selectionStart - 1) + 1;
+    const lineEnd = value.indexOf('\n', selectionEnd);
+    const endPos = lineEnd === -1 ? value.length : lineEnd;
+
+    const selectedLines = value.substring(lineStart, endPos);
+    const lines = selectedLines.split('\n');
+
+    const newLines = lines.map((line, index) => {
+      // すでに番号付きリストの場合はスキップ
+      if (line.trim().match(/^\d+\. /)) return line;
+      return `${index + 1}. ${line}`;
+    });
+
+    const newText = value.substring(0, lineStart) + newLines.join('\n') + value.substring(endPos);
+    updateText(newText);
+
+    setTimeout(() => {
+      textarea.selectionStart = lineStart;
+      textarea.selectionEnd = lineStart + newLines.join('\n').length;
+      textarea.focus();
+    }, 0);
+  }, [updateText]);
+  const handleQuote = useCallback(() => {
+    if (!inputRef.current) return;
+    const textarea = inputRef.current;
+    const {selectionStart, selectionEnd, value} = textarea;
+
+    // 選択範囲の行を取得
+    const lineStart = value.lastIndexOf('\n', selectionStart - 1) + 1;
+    const lineEnd = value.indexOf('\n', selectionEnd);
+    const endPos = lineEnd === -1 ? value.length : lineEnd;
+
+    const selectedLines = value.substring(lineStart, endPos);
+    const lines = selectedLines.split('\n');
+
+    const newLines = lines.map((line) => {
+      // すでに引用の場合はスキップ
+      if (line.trim().startsWith('> ')) return line;
+      return `> ${line}`;
+    });
+
+    const newText = value.substring(0, lineStart) + newLines.join('\n') + value.substring(endPos);
+    updateText(newText);
+
+    setTimeout(() => {
+      textarea.selectionStart = lineStart;
+      textarea.selectionEnd = lineStart + newLines.join('\n').length;
+      textarea.focus();
+    }, 0);
+  }, [updateText]);
+  const handleCode = useCallback(() => {
+    if (!inputRef.current) return;
+    const textarea = inputRef.current;
+    const {selectionStart, selectionEnd, value} = textarea;
+    const selectedText = value.substring(selectionStart, selectionEnd);
+
+    // 改行が含まれているかチェック
+    if (selectedText.includes('\n')) {
+      // 複数行の場合はコードブロック
+      const lineStart = value.lastIndexOf('\n', selectionStart - 1) + 1;
+      const lineEnd = value.indexOf('\n', selectionEnd);
+      const endPos = lineEnd === -1 ? value.length : lineEnd;
+
+      // コードブロックの前後に改行を追加
+      const prefix = lineStart > 0 ? '\n' : '';
+      const suffix = endPos < value.length ? '\n' : '';
+
+      const newText = `${value.substring(0, lineStart) + prefix}\`\`\`\n${selectedText}\n\`\`\`${suffix}${value.substring(endPos)}`;
+      updateText(newText);
+
+      setTimeout(() => {
+        textarea.selectionStart = lineStart + prefix.length + 4;
+        textarea.selectionEnd = lineStart + prefix.length + 4 + selectedText.length;
+        textarea.focus();
+      }, 0);
+    } else {
+      // 単一行の場合はインラインコード
+      toggleMarkdown('`', 'コード');
+    }
+  }, [toggleMarkdown, updateText]);
+
+  const toggleEditor = useCallback(() => {
     setIsAnimating(true);
     const newShowEditor = !showEditor;
     setShowEditor(newShowEditor);
@@ -88,7 +347,36 @@ function App() {
     setTimeout(() => {
       setIsAnimating(false);
     }, 300);
-  };
+  }, [showEditor, text, updateUrlParams]);
+
+  // グローバルキーボードショートカット
+  useEffect(() => {
+    const handleGlobalKeyDown = (e: KeyboardEvent) => {
+      // フォーカスされている要素を確認
+      const activeElement = document.activeElement;
+      const isInputFocused =
+        activeElement &&
+        (activeElement.tagName === 'INPUT' ||
+          activeElement.tagName === 'TEXTAREA' ||
+          activeElement.tagName === 'SELECT' ||
+          activeElement.getAttribute('contenteditable') === 'true');
+
+      // 入力要素にフォーカスがない場合のみ
+      if (!isInputFocused && e.key === 'e') {
+        e.preventDefault();
+        toggleEditor();
+      }
+
+      // ESCキーでフォーカスを外す
+      if (isInputFocused && e.key === 'Escape') {
+        e.preventDefault();
+        (activeElement as HTMLElement).blur();
+      }
+    };
+
+    document.addEventListener('keydown', handleGlobalKeyDown);
+    return () => document.removeEventListener('keydown', handleGlobalKeyDown);
+  }, [toggleEditor]);
 
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
@@ -140,6 +428,15 @@ function App() {
           <h2 className={styles.title}>
             <img className={styles.logo} src={getPublicPath('uni.svg')} alt="Uni"/> Markdown
           </h2>
+          <EditorToolbar
+            onBold={handleBold}
+            onItalic={handleItalic}
+            onLink={handleLink}
+            onList={handleList}
+            onOrderedList={handleOrderedList}
+            onQuote={handleQuote}
+            onCode={handleCode}
+          />
           <EditorArea
             ref={inputRef}
             placeholder="Markdownのテキストを入力"
@@ -174,7 +471,9 @@ function App() {
             </button>
             <h2 className={styles.title}>Preview</h2>
           </div>
-          <section ref={outputRef} className={styles.output} dangerouslySetInnerHTML={{__html: html}}/>
+          <section ref={outputRef} className={styles.outputSection}>
+            <output className={styles.output} dangerouslySetInnerHTML={{__html: html}}/>
+          </section>
           <div className={styles.controls}>
             <label>
               <input type="checkbox" className="mr-2" checked={isBold} onChange={toggleBold}/>

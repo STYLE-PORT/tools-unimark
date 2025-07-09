@@ -169,7 +169,7 @@
   }
 }
 
-.output {
+.output-section {
   flex: 1;
   overflow-y: auto;
   overflow-x: auto;
@@ -183,174 +183,178 @@
   font-size: 16px;
   color: #333;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-
   width: 100%;
-  max-width: 60em;
-  margin-left: auto;
-  margin-right: auto;
 
-  & h1,
-  & h2,
-  & h3,
-  & h4,
-  & h5,
-  & h6 {
-    margin-top: 1em;
-    margin-bottom: 0.5em;
-    line-height: 1.2;
+  .output {
+    display: block;
+    width: 100%;
+    max-width: 60em;
+    margin-left: auto;
+    margin-right: auto;
 
-    &:first-child {
+    & h1,
+    & h2,
+    & h3,
+    & h4,
+    & h5,
+    & h6 {
+      margin-top: 1em;
+      margin-bottom: 0.5em;
+      line-height: 1.2;
+
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+
+    & h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      padding-bottom: 0.2em;
+    }
+
+    & h2 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      padding-bottom: 0.2em;
+      margin-top: 1.5em;
+    }
+
+    & h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    & h4 {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    & h5 {
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+
+    & h6 {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #6a737d;
+    }
+
+    & p {
+      margin-bottom: 0.8em;
+      line-height: 1.6;
+    }
+
+    & ul,
+    & ol {
+      margin-bottom: 1.25em;
+      padding-left: 2em;
+    }
+
+    & ul {
+      list-style: disc;
+    }
+
+    & ol {
+      list-style: decimal;
+    }
+
+    & li {
+      margin-bottom: 0.25em;
+    }
+
+    & li > ul,
+    & li > ol {
+      margin-top: 0.25em;
+      margin-bottom: 0.25em;
+    }
+
+    & hr {
+      width: 100%;
+      border: none;
+      border-top: 3px solid #e0e0e0;
+      margin: 1em 0;
+    }
+
+    & blockquote {
+      border-left: 0.25em solid #dfe2e5;
+      padding: 0 1em;
+      margin: 0 0 1.25em 0;
+      color: #6a737d;
+    }
+
+    & blockquote > :first-child {
       margin-top: 0;
     }
-  }
 
-  & h1 {
-    font-size: 1.8rem;
-    font-weight: 700;
-    padding-bottom: 0.2em;
-  }
-
-  & h2 {
-    font-size: 1.4rem;
-    font-weight: 700;
-    padding-bottom: 0.2em;
-    margin-top: 1.5em;
-  }
-
-  & h3 {
-    font-size: 1.25rem;
-    font-weight: 600;
-  }
-
-  & h4 {
-    font-size: 1rem;
-    font-weight: 600;
-  }
-
-  & h5 {
-    font-size: 0.875rem;
-    font-weight: 600;
-  }
-
-  & h6 {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #6a737d;
-  }
-
-  & p {
-    margin-bottom: 0.8em;
-    line-height: 1.6;
-  }
-
-  & ul,
-  & ol {
-    margin-bottom: 1.25em;
-    padding-left: 2em;
-  }
-
-  & ul {
-    list-style: disc;
-  }
-
-  & ol {
-    list-style: decimal;
-  }
-
-  & li {
-    margin-bottom: 0.25em;
-  }
-
-  & li > ul,
-  & li > ol {
-    margin-top: 0.25em;
-    margin-bottom: 0.25em;
-  }
-
-  & hr {
-    width: 100%;
-    border: none;
-    border-top: 3px solid #e0e0e0;
-    margin: 1em 0;
-  }
-
-  & blockquote {
-    border-left: 0.25em solid #dfe2e5;
-    padding: 0 1em;
-    margin: 0 0 1.25em 0;
-    color: #6a737d;
-  }
-
-  & blockquote > :first-child {
-    margin-top: 0;
-  }
-
-  & blockquote > :last-child {
-    margin-bottom: 0;
-  }
-
-  & pre {
-    background-color: #f1f3f6;
-    padding: 1em;
-    overflow-x: auto;
-    border-radius: 3px;
-    margin: 0 0 1.25em 0;
-    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-    border: 1px solid #dfe2e5;
-    font-size: 0.85em;
-    line-height: 1.45;
-
-    code {
-      background-color: transparent;
-      padding: 0;
+    & blockquote > :last-child {
+      margin-bottom: 0;
     }
-  }
 
-  & code {
-    background-color: rgba(27, 31, 35, 0.05);
-    border-radius: 3px;
-    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-    font-size: 0.85em;
-    padding: 0.2em 0.4em;
-  }
+    & pre {
+      background-color: #f1f3f6;
+      padding: 1em;
+      overflow-x: auto;
+      border-radius: 3px;
+      margin: 0 0 1.25em 0;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      border: 1px solid #dfe2e5;
+      font-size: 0.85em;
+      line-height: 1.45;
 
-  & a {
-    color: #0366d6;
-    text-decoration: none;
-
-    &:hover {
-      text-decoration: underline;
+      code {
+        background-color: transparent;
+        padding: 0;
+      }
     }
-  }
 
-  & img {
-    max-width: 100%;
-    box-sizing: border-box;
-  }
+    & code {
+      background-color: rgba(27, 31, 35, 0.05);
+      border-radius: 3px;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      font-size: 0.85em;
+      padding: 0.2em 0.4em;
+    }
 
-  & table {
-    border-collapse: collapse;
-    width: 100%;
-    margin-bottom: 1.25em;
-    overflow: auto;
-    font-size: 0.85em;
-  }
+    & a {
+      color: #0366d6;
+      text-decoration: none;
 
-  & table th,
-  & table td {
-    border: none;
-    padding: 0.8em;
-    text-align: left;
-  }
+      &:hover {
+        text-decoration: underline;
+      }
+    }
 
-  & table th {
-    font-weight: 700;
-    padding-bottom: 0.3em;
-    border-bottom: 2px solid lightgray;
-  }
+    & img {
+      max-width: 100%;
+      box-sizing: border-box;
+    }
 
-  & table tr:not(:last-child) td {
-    border-bottom: 1px solid #f0f0f0;
+    & table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-bottom: 1.25em;
+      overflow: auto;
+      font-size: 0.85em;
+    }
+
+    & table th,
+    & table td {
+      border: none;
+      padding: 0.8em;
+      text-align: left;
+    }
+
+    & table th {
+      font-weight: 700;
+      padding-bottom: 0.3em;
+      border-bottom: 2px solid lightgray;
+    }
+
+    & table tr:not(:last-child) td {
+      border-bottom: 1px solid #f0f0f0;
+    }
   }
 }
 
@@ -464,16 +468,6 @@
   background: repeating-linear-gradient(to bottom, #6c757d, #6c757d 2px, transparent 2px, transparent 4px);
 }
 
-@media (max-width: 768px) {
-  .resize-handle {
-    display: none;
-  }
-
-  .toggle-button {
-    display: none;
-  }
-}
-
 .controls {
   position: absolute;
   bottom: 1rem;
@@ -496,19 +490,29 @@
   z-index: 10;
 }
 
-@media (max-width: 768px) {
-  .controls {
-    flex-direction: column;
-    align-items: flex-start;
-    left: 0.5rem;
-    right: 0.5rem;
-    bottom: 0.5rem;
-  }
+/*@media (max-width: 768px) {*/
+/*  .resize-handle {*/
+/*    display: none;*/
+/*  }*/
 
-  .button-group {
-    align-self: flex-end;
-  }
-}
+/*  .toggle-button {*/
+/*    display: none;*/
+/*  }*/
+/*}*/
+
+/*@media (max-width: 768px) {*/
+/*  .controls {*/
+/*    flex-direction: column;*/
+/*    align-items: flex-start;*/
+/*    left: 0.5rem;*/
+/*    right: 0.5rem;*/
+/*    bottom: 0.5rem;*/
+/*  }*/
+
+/*  .button-group {*/
+/*    align-self: flex-end;*/
+/*  }*/
+/*}*/
 
 .button-group {
   display: flex;
